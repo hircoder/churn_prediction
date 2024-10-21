@@ -20,14 +20,28 @@ This project entails building a **Churn Prediction Model** for an eCommerce plat
 
 Churn prediction is important for businesses to identify and retain customers who are likely to discontinue using their services. By leveraging advanced data processing techniques and machine learning algorithms, this model aims to provide accurate churn predictions, enabling proactive customer retention strategies.
 
+The project includes two key notebooks:
+
+churn_predict_optimized_org.ipynb: This notebook is responsible for processing the raw user event data, performing feature engineering, and generating a cleaned dataset. It saves this dataset as prepared_data.pkl for future use, which optimizes subsequent model training steps.
+churn_LGBM_optimized.ipynb: This notebook focuses exclusively on training the churn prediction model using the LightGBM algorithm. It loads the intermediate data (prepared_data.pkl) to skip the computationally expensive data preparation step, allowing the model training to proceed directly.
+
+### Data and Model Download
+You can download the preprocessed data (`prepared_data.pkl`) and the trained model (`churn_prediction_model.pkl`) from the following link:
+
+[Download prepared data and model](https://drive.google.com/drive/folders/1W9SVvLfelyBQFw1uOFa-Js0HJCnCHx4A?usp=sharing)
+
+This allows you to either directly use the files to retrain the model or make improvements on the existing model.
+
+
 ## Features
 
-- **Efficient Data Processing:** Utilizes **Dask** for handling large datasets by processing data in manageable chunks.
+- **Efficient Data Processing:** Tried to Optimize data handling large datasets by processing data in manageable chunks.
 - **Multiprocessing:** Employs Python's `multiprocessing` library to accelerate file processing.
 - **Feature Engineering:** Extracts and engineers relevant features essential for accurate churn prediction.
 - **Class Imbalance Handling:** Implements **SMOTE** (Synthetic Minority Over-sampling Technique) to address class imbalance in the dataset.
 - **Hyperparameter Tuning:** Uses **RandomizedSearchCV** for optimizing model parameters to enhance performance.
-- **Model Training:** Trains an **XGBoost** classifier known for its robustness and accuracy in classification tasks.
+- **Model Training:** churn_predict_optimized.ipynb Trains an **XGBoost** classifier known for its robustness and accuracy in classification tasks.
+      - LightGBM model in churn_LGBM_optimized.ipynb, which directly uses the prepared data to train and fine-tune the model efficiently.
 - **Model Persistence:** Saves intermediate results and the final trained model for future use, eliminating the need for reprocessing large data files.
 
 ## Prerequisites
@@ -65,6 +79,7 @@ matplotlib
 seaborn
 scikit-learn
 xgboost
+lightgbm
 imbalanced-learn
 joblib
 
@@ -72,23 +87,27 @@ joblib
 ## Usage
 Prepare  Data
 
-Ensure that your user event data CSV.gz (or .CSV) files are placed in the designated data directory. Update the data_path variable in the script to point to your data location.
+Prepare Data (churn_predict_optimized.ipynb)
+1. Ensure that your user event data files (in CSV or CSV.gz format) are placed in the designated data directory.
+2. Open and run the churn_predict_optimized_org.ipynb notebook.
+3.This notebook will process the raw data, perform feature engineering, and save the processed data as prepared_data.pkl.
 
-data_path = '/path/to/your/data_directory'  
-
-Execute the churn prediction script:
-python churn_prediction_optimized.py
-
-The script will display logs indicating the progress of data processing, feature extraction, model training, and evaluation.
+Train Model (churn_LGBM_optimized.ipynb)
+1. Once the prepared_data.pkl file is generated, open and run the churn_LGBM_optimized.ipynb notebook.
+2. This notebook loads the preprocessed data, applies the LightGBM algorithm, and performs hyperparameter tuning.
+3. The final trained model will be saved as churn_prediction_model.pkl.
 
 ## View Results
 
-After successful execution, the script will output:
+After running churn_predict_optimized.ipynb:
+   - You will obtain the intermediate prepared_data.pkl file, which contains all the engineered features required for model training.
 
-Classification Report: Detailed metrics on model performance.
-ROC-AUC Score: Evaluation metric to assess the model's ability to distinguish between classes.
-Confusion Matrix: Visual representation of prediction outcomes.
-Feature Importance: Insights into which features significantly impact churn predictions.
+After running churn_LGBM_optimized.ipynb:
+The notebook will output the following results:
+   - Classification Report: Detailed metrics on model performance, such as precision, recall, and F1-score.
+   - ROC-AUC Score: A performance metric indicating how well the model distinguishes between churned and retained customers.
+   - Confusion Matrix: A visual representation of prediction accuracy, showing true positive/negative and false positive/negative predictions.
+   - Feature Importance: Insights into which features contribute the most to the prediction of customer churn.
 
 ## Project Structure
 
